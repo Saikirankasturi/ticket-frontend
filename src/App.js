@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import TicketForm from './components/TicketForm';
+import TicketDashboard from './components/TicketDashboard';
+import TicketResponse from './components/TicketResponse';
 
-function App() {
+const App = () => {
+  const [tickets, setTickets] = useState([]);
+
+  const fetchTickets = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/tickets');
+      const data = await response.json();
+      setTickets(data);
+    } catch (error) {
+      console.error('Error fetching tickets:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<TicketForm onTicketSubmit={fetchTickets} />} />
+        <Route path="/dashboard" element={<TicketDashboard tickets={tickets} />} />
+        <Route path="/ticket/:id" element={<TicketResponse />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
