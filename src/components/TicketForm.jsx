@@ -27,7 +27,7 @@ const TicketForm = ({ onTicketSubmit }) => {
     setSuccess(false); // Reset success before submitting
 
     try {
-      const response = await fetch('http://localhost:5000/api/tickets', {
+      const response = await fetch('http://52.66.74.41:5000/api/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
